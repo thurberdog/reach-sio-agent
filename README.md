@@ -38,3 +38,9 @@ The SIO Agent excepts the following command-line options:
 -h or –help – Prints usage information.
 
 The startup script can also accept the following commands:
+
+start
+
+restart
+
+stop
