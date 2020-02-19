@@ -15,7 +15,7 @@
 
 static void sioDieWithError(char *errorMessage)
 {
-    LogMsg(LOG_ERR, "[SIO] Exiting: %s\n", errorMessage);
+    LogMsg(LOG_ERR, "Exiting: %s\n", errorMessage);
     exit(1);
 }
 
@@ -92,11 +92,11 @@ int sioTioSocketAccept(int serverFd, int addressFamily)
     if (clientFd >= 0) {
         switch (addressFamily) {
         case AF_UNIX:
-            LogMsg(LOG_INFO, "[SIO] Handling Unix client\n");
+            LogMsg(LOG_INFO, "Handling Unix client\n");
             break;
 
         case AF_INET:
-            LogMsg(LOG_INFO, "[SIO] Handling TCP client %s\n",
+            LogMsg(LOG_INFO, "Handling TCP client %s\n",
                 inet_ntoa(clientAddr.inetClientAddr.sin_addr));
             break;
 
@@ -148,12 +148,12 @@ int sioTioSocketRead(int socketFd, char *msgBuff, size_t bufferSize)
     int cnt;
 
     if ((cnt = recv(socketFd, msgBuff, bufferSize, 0)) <= 0) {
-        LogMsg(LOG_INFO, "[SIO] %s(): recv() failed, client closed\n", __FUNCTION__);
+        LogMsg(LOG_INFO, "%s(): recv() failed, client closed\n", __FUNCTION__);
         close(socketFd);
         return -1;
     } else {
-		LogMsg(LOG_INFO, "[SIO] received => \"%s\"\n", msgBuff);
         msgBuff[cnt] = 0;
+        LogMsg(LOG_INFO, "%s", msgBuff);
         return cnt;
     }
 }
@@ -162,11 +162,9 @@ int sioTioSocketRead(int socketFd, char *msgBuff, size_t bufferSize)
 void sioTioSocketWrite(int socketFd, const char *buff)
 {
     int cnt = strlen(buff);
-	
-	LogMsg(LOG_INFO, "[SIO] sending => \"%s\"\n", buff);
 
     if (send(socketFd, buff, cnt, 0) != cnt) {
-        LogMsg(LOG_ERR, "[SIO] socket_send_to_client(): send() failed, %d\n",
+        LogMsg(LOG_ERR, "socket_send_to_client(): send() failed, %d\n",
             socketFd);
         perror("what's messed up?");
     }
